@@ -58,7 +58,7 @@ class VertexAIAuth:
             error_message = (
             f"{RED}Vertex AI Error: Credentials missing.{RESET}\n"
             f"Please refer to the following documentation to obtain the necessary {YELLOW}Credentials{RESET}:\n" 
-            f"{CYAN}https://docs.cloud.google.com/vertex-ai/generative-ai/docs/start/api-keys{RESET}"
+            f"{CYAN}https://github.com/linfen0/comfyUI_Vertex_API/blob/master/%E4%BB%8E0%E5%BC%80%E5%A7%8B%E8%8E%B7%E5%8F%96Vertex%20AI%20%E5%87%AD%E8%AF%81%E7%9A%84%E6%96%B9%E6%B3%95.md{RESET}"
             )
             raise Exception(error_message)
 
