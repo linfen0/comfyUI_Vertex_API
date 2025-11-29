@@ -50,11 +50,19 @@ class VertexAIAuth:
     
         
         if not api_key and not service_account_json and not vertex_config.get("api_key") and not vertex_config.get("service_account_json"):
-             # 只有在真的没有任何凭证来源时才报错
-            RED = "\033[31m"
-            YELLOW = "\033[33m"
-            CYAN = "\033[36m"
-            RESET = "\033[0m"
+            import sys
+            # 导入 colorama 库
+            from colorama import init, Fore, Style 
+
+            # 在程序开始时初始化 colorama，这将使得 ANSI 颜色代码在 Windows 上也能工作
+            init() 
+
+            # 定义颜色代码 (使用 colorama 的常量更标准，但你也可以继续用你的 ANSI 字符串)
+            # 推荐使用 colorama 的常量，因为它更可靠：
+            RED = Fore.RED + Style.BRIGHT
+            YELLOW = Fore.YELLOW
+            CYAN = Fore.CYAN
+            RESET = Style.RESET_ALL # 使用 Style.RESET_ALL 代替 \033[0m
             error_message = (
             f"{RED}Vertex AI Error: Credentials missing.{RESET}\n"
             f"Please refer to the following documentation to obtain the necessary {YELLOW}Credentials{RESET}:\n" 
