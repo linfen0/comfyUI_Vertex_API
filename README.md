@@ -13,7 +13,7 @@
     *   支持负面提示词 (Negative Prompt)
 *   **灵活的认证管理 (Vertex AI Auth)**:
     *   **双重认证模式**：支持 **API Key** (推荐个人使用) 和 **Service Account JSON** (推荐生产环境/企业使用)。
-    *   **自动保存配置**：认证信息可保存到本地 'config/xxxx.json'内，无需每次重复输入。
+    *   **自动保存配置**：认证信息自动保存到本地 'config/xxxx.json'内，此后输入直接输入json文件名即可，注意只需文件名无需目录。
     *   **安全隐私**：使用config文件保存认证信息，避免在UI上暴露敏感信息。
 *   **高级配置系统**:
     *   提供独立的配置节点 (`VertexGenerationConfig`) 用于精细控制生成参数（如 Top-P, Safety Settings）。
