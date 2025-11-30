@@ -1,7 +1,7 @@
 import os
 import json
 from .utils import save_config_file, load_config_file
-
+import time
 class VertexAIAuth:
     """
     【认证配置节点】
@@ -83,6 +83,15 @@ class VertexAIAuth:
         # 4. 保存配置 (如果需要)
         full_path = config_file # Default to input
         if should_save:
+           
+            #config_file为空则创建一个，格式为vertex_config+时间戳.json
+            if not os.path.exists(config_file):
+                #创建config文件夹
+                os.makedirs("config", exist_ok=True)
+                config_file = os.path.join("config", "vertex_config_" + str(int(time.time())) + ".json")
+                #创建文件
+                with open(config_file, "w",encoding="utf-8") as f:
+                    json.dump({}, f)
             try:
                 # 保持原有的 generation_config 不变 (如果有)
                 full_data = load_config_file(config_file)
@@ -94,14 +103,6 @@ class VertexAIAuth:
                 print(f"Vertex AI: Failed to save config: {e}")
 
         # 5. 返回结果和 UI 更新指令
-        # 如果刚刚保存了 API Key，则自动清除 UI 中的输入框，并更新 config_file 路径
-        if api_key and api_key.strip('*'):
-            return {
-                "ui": {
-                    "api_key": ["***********"],
-                    "config_file": [full_path] # 自动填充保存后的完整路径
-                }, 
-                "result": (vertex_config,)
-            }
+        # 如果刚刚保存了 API Key，则自动清除 UI 中的输入框，并更新 config_file 路
         
         return (vertex_config,)

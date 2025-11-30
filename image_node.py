@@ -141,7 +141,7 @@ class VertexGeminiImageGenerator(VertexBase):
         
         try:
             response = requests.post(url, headers=headers, json=payload, timeout=120)
-            print(payload)
+            #(payload)
             response.raise_for_status()
             # streamGenerateContent 返回的是列表（流式），但这里我们一次性接收
             # 或者是 JSON 数组，或者是一行行的 JSON
