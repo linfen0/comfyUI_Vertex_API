@@ -28,11 +28,12 @@ class VertexAIAuth:
     def create_config(self, config_file, service_account_json="", api_key=""):
         # 1. 加载现有配置
         saved_config = {}
-        try:
-            saved_data = load_config_file(config_file)
-            saved_config = saved_data.get("vertex_config", {})
-        except Exception as e:
-            print(f"Vertex AI: Failed to load config {config_file}: {e}")
+        if config_file:
+            try:
+                saved_data = load_config_file(config_file)
+                saved_config = saved_data.get("vertex_config", {})
+            except Exception as e:
+                print(f"Vertex AI: Failed to load config {config_file}: {e}")
 
         # 2. 初始化配置 (使用默认值或已保存的值)
         # 默认 location 为 us-central1，project_id 为 auto-detect
@@ -49,7 +50,7 @@ class VertexAIAuth:
         has_valid_creds = vertex_config.get("api_key") or vertex_config.get("service_account_json") or os.environ.get("GOOGLE_APPLICATION_CREDENTIALS")
     
         
-        if not api_key and not service_account_json and not vertex_config.get("api_key") and not vertex_config.get("service_account_json"):
+        if not api_key and not service_account_json and not vertex_config.get("api_key") and not vertex_config.get("service_account_json") and not os.environ.get("GOOGLE_APPLICATION_CREDENTIALS") and not config_file:
             import sys
             # 导入 colorama 库
             from colorama import init, Fore, Style 
@@ -83,21 +84,13 @@ class VertexAIAuth:
         # 4. 保存配置 (如果需要)
         full_path = config_file # Default to input
         if should_save:
-           
-            #config_file为空则创建一个，格式为vertex_config+时间戳.json
-            if not os.path.exists(config_file):
-                #创建config文件夹
-                config_dir="config"
-                if not config_file:
-                    os.makedirs("config", exist_ok=True)
-                else:
-                    os.makedirs(os.path.dirname(config_file), exist_ok=True)
-                    config_dir=os.path.dirname(config_file)
-                #创建文件
-                config_file=config_dir+"/vertex_config_" + str(int(time.time())) + ".json"
-                print(config_file)
-                with open(config_file, "w",encoding="utf-8") as f:
-                    json.dump("", f)
+            # 如果 config_file 为空，则创建一个，格式为 vertex_config+时间戳.json
+            if not config_file:
+                config_file = "vertex_config_" + str(int(time.time())) + ".json"
+            
+            # 确保只使用文件名，避免路径拼接错误
+            config_file = os.path.basename(config_file)
+
             try:
                 # 保持原有的 generation_config 不变 (如果有)
                 full_data = load_config_file(config_file)
@@ -110,5 +103,5 @@ class VertexAIAuth:
 
         # 5. 返回结果和 UI 更新指令
         # 如果刚刚保存了 API Key，则自动清除 UI 中的输入框，并更新 config_file 路
-        
+        vertex_config["config_file"] = config_file
         return (vertex_config,)

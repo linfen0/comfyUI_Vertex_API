@@ -43,8 +43,19 @@ class VertexGeminiImageGenerator(VertexBase):
     def generate_image(self, vertex_config, prompt, model_name, aspect_ratio, person_generation, output_resolution, output_format, image_input=None, image_2=None, image_3=None, image_4=None, generation_config=None, negative_prompt="", custom_model_name=""):
         
         # 1. 解包认证信息
+        #优先从config.json中解包
+        
+        vertex_config_file = vertex_config.get("config_file")
+        if vertex_config_file:
+            from .utils import load_config_file
+            try:
+                loaded_data = load_config_file(vertex_config_file)
+                # Merge loaded config into vertex_config, prioritizing loaded values
+                loaded_vertex_config = loaded_data.get("vertex_config", {})
+                vertex_config.update(loaded_vertex_config)
+            except Exception as e:
+                print(f"Vertex AI: Failed to load config file {vertex_config_file}: {e}")
         project_id = vertex_config.get("project_id")
-        location = vertex_config.get("location")
         service_account_json = vertex_config.get("service_account_json")
         api_key = vertex_config.get("api_key")
 
