@@ -1,5 +1,4 @@
 google-auth
 requests
 pillow
-torch
 numpy

@@ -48,16 +48,15 @@ class VertexGeminiImageGenerator(VertexBase):
         vertex_config_file = vertex_config.get("config_file")
         if vertex_config_file:
             from .utils import load_config_file
-            try:
-                loaded_data = load_config_file(vertex_config_file)
-                # Merge loaded config into vertex_config, prioritizing loaded values
-                loaded_vertex_config = loaded_data.get("vertex_config", {})
-                vertex_config.update(loaded_vertex_config)
-            except Exception as e:
-                print(f"Vertex AI: Failed to load config file {vertex_config_file}: {e}")
-        project_id = vertex_config.get("project_id")
-        service_account_json = vertex_config.get("service_account_json")
-        api_key = vertex_config.get("api_key")
+            loaded_config=load_config_file(vertex_config_file).get('vertex_config')
+            project_id = loaded_config.get('project_id')
+            service_account_json = loaded_config.get('service_account_json')
+            api_key = loaded_config.get('api_key')
+            
+        else:
+            project_id = vertex_config.get("project_id")
+            service_account_json = vertex_config.get("service_account_json")
+            api_key = vertex_config.get('api_key')
 
         target_model = custom_model_name if custom_model_name.strip() else model_name
         
