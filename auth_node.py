@@ -87,11 +87,17 @@ class VertexAIAuth:
             #config_file为空则创建一个，格式为vertex_config+时间戳.json
             if not os.path.exists(config_file):
                 #创建config文件夹
-                os.makedirs("config", exist_ok=True)
-                config_file = os.path.join("config", "vertex_config_" + str(int(time.time())) + ".json")
+                config_dir="config"
+                if not config_file:
+                    os.makedirs("config", exist_ok=True)
+                else:
+                    os.makedirs(os.path.dirname(config_file), exist_ok=True)
+                    config_dir=os.path.dirname(config_file)
                 #创建文件
+                config_file=config_dir+"/vertex_config_" + str(int(time.time())) + ".json"
+                print(config_file)
                 with open(config_file, "w",encoding="utf-8") as f:
-                    json.dump({}, f)
+                    json.dump("", f)
             try:
                 # 保持原有的 generation_config 不变 (如果有)
                 full_data = load_config_file(config_file)
