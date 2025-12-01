@@ -16,10 +16,8 @@ def get_dynamic_model_list(location="us-central1"):
     """
     default_models = [
         "gemini-3-pro-image-preview",
-        "imagen-3.0-generate-001",
-        "gemini-1.5-pro-002",
-        "gemini-1.5-flash-002",
-        "gemini-1.0-pro-vision",
+        "gemini-3.0-pro-preview",
+        "gemini-2.5-flash-image",
     ]
 
     if not HAS_GOOGLE_AUTH:

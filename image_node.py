@@ -67,9 +67,9 @@ class VertexGeminiImageGenerator(VertexBase):
             headers = {"Content-Type": "application/json"}
         else:
             # 使用 OAuth 方式
-            token, auth_project_id = self.get_access_token(service_account_json)
-            final_project_id = project_id if project_id != "auto-detect-if-empty" else auth_project_id
-            url = f"https://{location}-aiplatform.googleapis.com/v1/projects/{final_project_id}/locations/{location}/publishers/google/models/{target_model}:streamGenerateContent"
+            (location,token, auth_project_id) = self.get_access_token(service_account_json)
+            
+            url = f"https://{location}-aiplatform.googleapis.com/v1/projects/{auth_project_id}/locations/{location}/publishers/google/models/{target_model}:streamGenerateContent"
             headers = {
                 "Authorization": f"Bearer {token}",
                 "Content-Type": "application/json; charset=utf-8"
@@ -176,7 +176,7 @@ class VertexGeminiImageGenerator(VertexBase):
         for result in result_list:
             candidates = result.get('candidates', [])
             if not candidates: continue
-            
+        
             parts = candidates[0].get('content', {}).get('parts', [])
             for part in parts:
                 if 'inlineData' in part:
